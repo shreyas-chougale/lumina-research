@@ -105,3 +105,29 @@ async def semantic_search(query: str, current_user: UserResponse = Depends(get_c
         })
                 
     return {"results": formatted_results}
+
+from bson import ObjectId
+
+@router.delete("/{paper_id}")
+async def delete_paper(paper_id: str, current_user: UserResponse = Depends(get_current_user)):
+    try:
+        paper = await db.db["papers"].find_one({"_id": ObjectId(paper_id), "user_id": current_user.id})
+        if not paper:
+            raise HTTPException(status_code=404, detail="Paper not found")
+            
+        # Delete PDF
+        if os.path.exists(paper.get("file_path", "")):
+            os.remove(paper["file_path"])
+            
+        # Delete from MongoDB
+        await db.db["papers"].delete_one({"_id": ObjectId(paper_id)})
+        
+        # Delete from ChromaDB
+        try:
+            rag_service.vector_store._collection.delete(where={"paper_id": paper_id})
+        except Exception:
+            pass
+            
+        return {"message": "Paper deleted successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
