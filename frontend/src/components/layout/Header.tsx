@@ -3,11 +3,10 @@ import { Search, Bell, User, LogOut, Settings, CreditCard } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { useAuth } from "@/store/AuthContext"
 import { motion, AnimatePresence } from "framer-motion"
-import { Link, useNavigate } from "react-router-dom"
+import { Link } from "react-router-dom"
 
 export function Header() {
   const { user, logout } = useAuth()
-  const navigate = useNavigate()
   const [showNotifications, setShowNotifications] = useState(false)
   const [showProfile, setShowProfile] = useState(false)
 
