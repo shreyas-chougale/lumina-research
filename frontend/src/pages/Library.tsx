@@ -3,7 +3,7 @@ import { motion } from "framer-motion"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { UploadCloud, Search, Filter, MoreVertical, FileText, CheckCircle2, XCircle, Loader2 } from "lucide-react"
+import { UploadCloud, Search, Filter, Trash2, FileText, CheckCircle2, XCircle, Loader2 } from "lucide-react"
 import { api } from "@/services/api"
 
 interface UploadItem {
@@ -29,6 +29,17 @@ export function Library() {
       setPapers(response.data)
     } catch (err) {
       console.error("Failed to fetch papers", err)
+    }
+  }
+
+  const handleDelete = async (paperId: string) => {
+    if (!window.confirm("Are you sure you want to delete this paper?")) return;
+    try {
+      await api.delete(`/papers/${paperId}`)
+      fetchPapers()
+    } catch (err) {
+      console.error("Failed to delete paper", err)
+      alert("Failed to delete paper")
     }
   }
 
@@ -177,8 +188,12 @@ export function Library() {
                   <div className="h-10 w-10 bg-blue-500/10 rounded-lg flex items-center justify-center shrink-0">
                     <FileText className="h-5 w-5 text-blue-500" />
                   </div>
-                  <button className="text-muted-foreground hover:text-foreground opacity-0 group-hover:opacity-100 transition-opacity">
-                    <MoreVertical className="h-5 w-5" />
+                  <button 
+                    onClick={() => handleDelete(paper._id || paper.id)}
+                    className="text-muted-foreground hover:text-destructive opacity-0 group-hover:opacity-100 transition-opacity"
+                    title="Delete Paper"
+                  >
+                    <Trash2 className="h-5 w-5" />
                   </button>
                 </div>
                 <h4 className="font-semibold text-base mb-1 line-clamp-2 flex-1">{paper.title}</h4>
