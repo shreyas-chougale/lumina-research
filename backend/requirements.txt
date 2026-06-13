@@ -15,8 +15,7 @@ python-jose[cryptography]
 python-multipart
 pymupdf
 pdfplumber
-sentence-transformers
-langchain-huggingface
+fastembed
 langgraph
 email-validator
 langchain-text-splitters
