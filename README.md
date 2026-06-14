@@ -4,6 +4,8 @@ A production-grade AI SaaS application designed to help researchers upload, anal
 
 Powered by a LangGraph multi-agent architecture, Groq (Llama 3), ChromaDB (RAG), FastAPI, and React.
 
+**Live Demo: https://lumina-research-nine.vercel.app/**
+
 ---
 
 ## 🚀 Key Features
