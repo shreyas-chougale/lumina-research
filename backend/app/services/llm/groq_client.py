@@ -1,7 +1,7 @@
 from langchain_groq import ChatGroq
 from app.core.config import settings
 
-def get_groq_llm(model_name: str = "llama-3.3-70b-versatile", temperature: float = 0.0):
+def get_groq_llm(model_name: str = "llama-3.1-8b-instant", temperature: float = 0.0):
     """
     Get a configured Groq LLM instance using LangChain.
     """
