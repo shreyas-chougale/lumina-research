@@ -46,7 +46,7 @@ async def research_agent(state):
     ])
     chain = prompt | llm
     response = await chain.ainvoke({"messages": state["messages"], "context": context})
-    return {"messages": [AIMessage(content=response.content, name="ResearchAgent")], "research_data": response.content}
+    return {"messages": [AIMessage(content="Extracted key research findings.", name="ResearchAgent")], "research_data": response.content}
 
 async def summary_agent(state):
     prompt = ChatPromptTemplate.from_messages([
@@ -56,7 +56,7 @@ async def summary_agent(state):
     chain = prompt | llm
     data = state.get("research_data", "") or "No prior research data found."
     response = await chain.ainvoke({"messages": state["messages"], "data": data})
-    return {"messages": [AIMessage(content=response.content, name="SummaryAgent")], "summary_data": response.content}
+    return {"messages": [AIMessage(content="Summarized the research data.", name="SummaryAgent")], "summary_data": response.content}
 
 async def citation_agent(state):
     context = rag_service.retrieve_context("references and methodology", state["user_id"], state.get("paper_ids", []))
@@ -66,7 +66,7 @@ async def citation_agent(state):
     ])
     chain = prompt | llm
     response = await chain.ainvoke({"messages": state["messages"], "context": context})
-    return {"messages": [AIMessage(content=response.content, name="CitationAgent")], "citation_data": response.content}
+    return {"messages": [AIMessage(content="Extracted citations and metadata.", name="CitationAgent")], "citation_data": response.content}
 
 async def comparison_agent(state):
     context = rag_service.retrieve_context(state.get("topic", "comparison"), state["user_id"], state.get("paper_ids", []))
@@ -76,7 +76,7 @@ async def comparison_agent(state):
     ])
     chain = prompt | llm
     response = await chain.ainvoke({"messages": state["messages"], "context": context})
-    return {"messages": [AIMessage(content=response.content, name="ComparisonAgent")], "comparison_data": response.content}
+    return {"messages": [AIMessage(content="Compared methodologies and results.", name="ComparisonAgent")], "comparison_data": response.content}
 
 async def literature_review_agent(state):
     prompt = ChatPromptTemplate.from_messages([
@@ -90,4 +90,4 @@ async def literature_review_agent(state):
         "summary": state.get("summary_data", ""),
         "comparison": state.get("comparison_data", "")
     })
-    return {"messages": [AIMessage(content=response.content, name="LiteratureReviewAgent")], "final_report": response.content}
+    return {"messages": [AIMessage(content="Final literature review generated.", name="LiteratureReviewAgent")], "final_report": response.content}
